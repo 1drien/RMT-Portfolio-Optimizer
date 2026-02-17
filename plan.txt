@@ -1,0 +1,5 @@
+import yfinance as yf
+meta = yf.Ticker("META")
+print("Company Sector:", meta.info['sector'])
+print("P/E Ratio:", meta.info['trailingPE'])
+print("Company Beta:", meta.info['beta'])
