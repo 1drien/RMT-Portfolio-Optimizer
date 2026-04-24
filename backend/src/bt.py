@@ -8,50 +8,43 @@ class PortfolioBacktester:
     """
 
     def __init__(self, log_returns: pd.DataFrame, split_ratio: float = 0.7):
-        """
-        :param log_returns: L'historique complet des rendements logarithmiques.
-        :param split_ratio: Le pourcentage de données à utiliser pour l'apprentissage ex: 0.7 = 70%.
-        """
         self.log_returns = log_returns
         self.split_ratio = split_ratio
-        
-        # On calcule l'indice de coupure
         self.split_index = int(len(self.log_returns) * self.split_ratio)
-        
-        # 1. Découpage : Période d'Apprentissage; In-Sample
         self.train_returns = self.log_returns.iloc[:self.split_index]
-        
-        # 2. Découpage : Période de Test Out-of-Sample
         self.test_returns = self.log_returns.iloc[self.split_index:]
 
     def prepare_train_data(self):
-        """
-        Standardise uniquement les données d'apprentissage pour ne pas tricher en regardant le futur.
-        """
         mu_train = self.train_returns.mean()
         sigma_train = self.train_returns.std()
-        
-        # Standardisation du Z-Score sur le Train Set
         x_norm_train = (self.train_returns - mu_train) / sigma_train
-        
         return x_norm_train, sigma_train
 
     def compute_realized_volatility(self, weights: pd.Series) -> float:
-        """
-        Calcule la volatilité réalisée sur la période de test.
-        """
-        # Matrice de covariance empirique sur le FUTUR, Période de test
         sigma_test = self.test_returns.cov().values
         w = weights.values
-        
-        # Calcul mathématique de la variance du portefeuille
         variance_test = w.T @ sigma_test @ w
-        
-        # La volatilité est la racine carrée de la variance
         daily_volatility = np.sqrt(variance_test)
-        
-        # On annualise la volatilité (en multipliant par la racine de 252 jours de bourse)
-        # pour que le chiffre soit lisible; ex: 15% par an au lieu de 0.8% par jour
         annualized_volatility = daily_volatility * np.sqrt(252)
-        
         return annualized_volatility
+
+    def compute_sharpe_ratio(self, weights: pd.Series, risk_free_rate: float = 0.03) -> float:
+        """
+        Calcule le Sharpe Ratio annualisé sur la période de test.
+        :param weights: poids du portefeuille
+        :param risk_free_rate: taux sans risque annualisé (défaut 3%)
+        """
+        # Rendement du portefeuille sur le test
+        port_returns = self.test_returns[weights.index].dot(weights)
+
+        # Rendement annualisé (252 jours de bourse)
+        annualized_return = port_returns.mean() * 252
+
+        # Volatilité annualisée
+        annualized_vol = port_returns.std() * np.sqrt(252)
+
+        # Sharpe = (R_p - R_f) / sigma_p
+        if annualized_vol == 0:
+            return 0.0
+
+        return (annualized_return - risk_free_rate) / annualized_vol

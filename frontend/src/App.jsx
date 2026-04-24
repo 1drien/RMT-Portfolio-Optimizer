@@ -164,17 +164,19 @@ function App() {
         ) : (
           <>
             {/* KPI ROW */}
-            <div className="grid grid-cols-4 gap-6">
+            <div className="grid grid-cols-6 gap-4">
               {[
                 { label: "Benchmark Vol", val: data.metrics.vol_naive + "%", color: "text-slate-500" },
                 { label: "Optimal RMT Vol", val: data.metrics.vol_rmt + "%", color: "text-[#0A192F]" },
                 { label: "Stability Index", val: "+" + data.metrics.gain + "%", color: "text-[#C5A059]" },
+                { label: "Sharpe Naive", val: data.metrics.sharpe_naive, color: "text-slate-500" },
+                { label: "Sharpe RMT", val: data.metrics.sharpe_rmt, color: "text-[#C5A059]" },
                 { label: "Risk VaR (95%)", val: data.metrics.var_95 + "%", color: "text-red-800" }
               ].map((kpi, i) => (
-                <div key={i} className="bg-white border border-[#D4CFC4] p-6 shadow-md relative overflow-hidden">
+                <div key={i} className="bg-white border border-[#D4CFC4] p-5 shadow-md relative overflow-hidden">
                   <div className="absolute top-0 left-0 w-1 h-full bg-[#C5A059]"></div>
-                  <p className="text-[10px] text-[#A39E93] font-bold uppercase tracking-widest mb-2">{kpi.label}</p>
-                  <p className={`text-3xl font-light tracking-tighter ${kpi.color}`}>{kpi.val}</p>
+                  <p className="text-[9px] text-[#A39E93] font-bold uppercase tracking-widest mb-2">{kpi.label}</p>
+                  <p className={`text-2xl font-light tracking-tighter ${kpi.color}`}>{kpi.val}</p>
                 </div>
               ))}
             </div>

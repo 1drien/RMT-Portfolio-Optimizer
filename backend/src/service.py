@@ -41,6 +41,10 @@ class PortfolioService:
         gain_val = float(((vol_n / vol_r) - 1) * 100) if vol_r != 0 else 0.0
         var_95 = float(np.percentile(port_ret_rmt.values, 5))
 
+        # Sharpe ratios
+        sharpe_n = float(bt.compute_sharpe_ratio(weights_df['Poids_Naifs']))
+        sharpe_r = float(bt.compute_sharpe_ratio(weights_df['Poids_RMT']))
+
         # 6. MARCHENKO-PASTUR
         Q = filter_rmt.Q
         lambda_max = filter_rmt.lambda_max
@@ -57,7 +61,9 @@ class PortfolioService:
                 "vol_naive": round(vol_n * 100, 2),
                 "vol_rmt": round(vol_r * 100, 2),
                 "gain": round(gain_val, 2),
-                "var_95": round(var_95 * 100, 2)
+                "var_95": round(var_95 * 100, 2),
+                "sharpe_naive": round(sharpe_n, 2),
+                "sharpe_rmt": round(sharpe_r, 2)
             },
             "marchenko_pastur": {
                 "eigenvalues": [float(round(v, 4)) for v in eigenvalues],
