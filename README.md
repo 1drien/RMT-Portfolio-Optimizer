@@ -1,85 +1,150 @@
-# RMT Portfolio Optimizer
+<div align="center">
 
-![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=flat&logo=python&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688?style=flat&logo=fastapi&logoColor=white)
-![React](https://img.shields.io/badge/React-18-61DAFB?style=flat&logo=react&logoColor=black)
-![Vite](https://img.shields.io/badge/Vite-5-646CFF?style=flat&logo=vite&logoColor=white)
-![TailwindCSS](https://img.shields.io/badge/Tailwind-3-06B6D4?style=flat&logo=tailwindcss&logoColor=white)
-![License](https://img.shields.io/badge/license-Academic-lightgrey)
-![Status](https://img.shields.io/badge/status-active-success)
+<img src="https://capsule-render.vercel.app/api?type=venom&color=0:0a0e27,30:0d1b3d,60:1a2855,100:2d4a8c&height=280&section=header&text=RMT%20Portfolio%20Optimizer&fontSize=50&fontColor=00f5d4&animation=fadeIn&fontAlignY=40&desc=Random%20Matrix%20Theory%20%E2%97%A6%20Quantitative%20Finance%20Engine&descAlignY=62&descColor=9d8df1&stroke=00f5d4&strokeWidth=2" width="100%"/>
 
-A quantitative portfolio optimization engine based on **Random Matrix Theory** (RMT) for filtering statistical noise from financial covariance matrices.
+<br/>
 
-Academic project for the Financial Programming course — M2 FinTech.
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=22&pause=1000&color=00F5D4&center=true&vCenter=true&width=750&lines=Marchenko-Pastur+Eigenvalue+Filtering;Global+Minimum+Variance+Portfolio+Optimization;FastAPI+%E2%97%A6+React+%E2%97%A6+Tailwind;%241drien+%E2%97%A6+%40elkiliayma-sys" alt="Typing SVG" />
 
----
+<br/><br/>
 
-## Context and problem statement
+[![Python](https://img.shields.io/badge/Python_3.9+-FFD43B?style=for-the-badge&logo=python&logoColor=306998)](https://python.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com)
+[![NumPy](https://img.shields.io/badge/NumPy-013243?style=for-the-badge&logo=numpy&logoColor=white)](https://numpy.org)
+[![Pandas](https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white)](https://pandas.pydata.org)
+[![React](https://img.shields.io/badge/React_18-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev)
+[![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev)
+[![Tailwind](https://img.shields.io/badge/Tailwind-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 
-Markowitz portfolio optimization (Global Minimum Variance Portfolio) relies on inverting the covariance matrix of asset returns. In practice, this matrix is estimated from a limited historical sample, which introduces substantial statistical noise. Inverting a noisy matrix amplifies the noise and produces unstable allocations with extreme weights.
+<br/>
 
-**Random Matrix Theory** (Marchenko-Pastur, 1967) provides a mathematical framework for distinguishing genuine signal from pure statistical noise in empirical correlation matrices. By filtering out eigenvalues identified as noise, we obtain a more stable covariance matrix that yields more robust portfolios **out-of-sample**.
+[![1drien](https://img.shields.io/badge/─%20@1drien%20─-0d1117?style=flat-square&logo=github&logoColor=00f5d4)](https://github.com/1drien)
+[![elkiliayma](https://img.shields.io/badge/─%20@elkiliayma--sys%20─-0d1117?style=flat-square&logo=github&logoColor=9d8df1)](https://github.com/elkiliayma-sys)
 
----
+</div>
 
-## Theoretical pipeline
+<br/>
 
-1. **Data acquisition** of historical prices via the Yahoo Finance API
-2. **Log-returns computation** to stationarize the time series
-3. **Z-score standardization** (matrix X with zero mean, unit variance)
-4. **Empirical correlation matrix** C = X·Xᵀ / T
-5. **Spectral decomposition** C = V·Λ·Vᵀ
-6. **Marchenko-Pastur filtering**: computation of the critical threshold λ_max
-7. **Clipping**: noisy eigenvalues replaced by their mean
-8. **Reconstruction** of the filtered covariance matrix Σ̃
-9. **GMVP optimization**: w* = Σ̃⁻¹·1 / (1ᵀ·Σ̃⁻¹·1)
-10. **Out-of-sample backtesting**: realized volatility comparison vs naive approach
+> A quantitative portfolio optimization engine based on **Random Matrix Theory** for filtering statistical noise from financial covariance matrices.
+> Academic project — M2 FinTech, *Financial Programming*.
 
 ---
 
-## Technical architecture
+## Context & Problem
+
+Markowitz portfolio optimization (Global Minimum Variance Portfolio) relies on inverting the covariance matrix of asset returns. In practice, this matrix is estimated from a limited historical sample, which introduces substantial **statistical noise**. Inverting a noisy matrix amplifies that noise and produces unstable allocations with extreme weights.
+
+**Random Matrix Theory** (Marchenko–Pastur, 1967) provides a mathematical framework to distinguish genuine signal from pure statistical noise in empirical correlation matrices. By filtering out eigenvalues identified as noise, we obtain a more stable covariance matrix that yields more robust portfolios **out-of-sample**.
+
+---
+
+## The Mathematical Pipeline
+
+<div align="center">
+
+```
+╔══════════════════════════════════════════════════════════════════════╗
+║                                                                      ║
+║   Yahoo Finance  ──▶  log-returns  ──▶  Z-score  ──▶  C = X·Xᵀ/T   ║
+║                                                          │           ║
+║                                                          ▼           ║
+║                                                   C = V·Λ·Vᵀ         ║
+║                                                          │           ║
+║                                                          ▼           ║
+║                                            Marchenko–Pastur          ║
+║                                              λ_max threshold         ║
+║                                                          │           ║
+║                                                          ▼           ║
+║                                              Eigenvalue clipping     ║
+║                                                          │           ║
+║                                                          ▼           ║
+║                                              Reconstruct  Σ̃          ║
+║                                                          │           ║
+║                                                          ▼           ║
+║                              w* = Σ̃⁻¹·𝟙 / (𝟙ᵀ·Σ̃⁻¹·𝟙)                ║
+║                                                          │           ║
+║                                                          ▼           ║
+║                              Out-of-sample backtest vs naive         ║
+║                                                                      ║
+╚══════════════════════════════════════════════════════════════════════╝
+```
+
+</div>
+
+<table align="center">
+<tr>
+<td align="center" width="50%">
+
+### Marchenko–Pastur
+Theoretical eigenvalue distribution
+of a pure-noise correlation matrix
+**→ defines the noise threshold λ_max**
+
+</td>
+<td align="center" width="50%">
+
+### GMVP Optimization
+Global Minimum Variance Portfolio
+on the **filtered** covariance matrix
+**→ stable out-of-sample weights**
+
+</td>
+</tr>
+</table>
+
+---
+
+## Architecture
 
 ```
 RMT-Portfolio-Optimizer/
-├── backend/                 # FastAPI service
-│   ├── main.py              # HTTP entry point
+│
+├── backend/                          ← FastAPI service
+│   ├── main.py                       ← HTTP entry point
 │   ├── requirements.txt
 │   └── src/
-│       ├── data.py          # MarketDataHandler: acquisition & normalization
-│       ├── cov.py           # RMTFilter: Marchenko-Pastur filtering
-│       ├── opt.py           # PortfolioOptimizer: GMVP
-│       ├── bt.py            # PortfolioBacktester: out-of-sample validation
-│       ├── service.py       # Pipeline orchestration
-│       └── plots.py         # Matplotlib visualizations (dev)
-└── frontend/                # React + Vite + Tailwind dashboard
+│       ├── data.py                   ← MarketDataHandler — acquisition & normalization
+│       ├── cov.py                    ← RMTFilter — Marchenko–Pastur filtering
+│       ├── opt.py                    ← PortfolioOptimizer — GMVP
+│       ├── bt.py                     ← PortfolioBacktester — out-of-sample validation
+│       ├── service.py                ← Pipeline orchestration
+│       └── plots.py                  ← Matplotlib visualizations (dev)
+│
+└── frontend/                         ← React + Vite + Tailwind dashboard
     └── src/
-        ├── App.jsx          # Main interface
+        ├── App.jsx                   ← Main interface
         └── main.jsx
 ```
 
-The backend follows **Object-Oriented Programming** principles with a single responsibility per class.
+> The backend follows **Object-Oriented Programming** principles with a single responsibility per class.
 
 ---
 
-## Tech stack
+## Tech Stack
 
-**Backend**
-- Python 3.9+
-- FastAPI (REST API)
-- NumPy, Pandas (matrix algebra)
-- yfinance (market data)
+<div align="center">
 
-**Frontend**
-- React 18
-- Vite (bundler)
-- Tailwind CSS (styling)
-- Recharts (visualizations)
+[![Python](https://skillicons.dev/icons?i=python)](https://python.org)
+[![FastAPI](https://skillicons.dev/icons?i=fastapi)](https://fastapi.tiangolo.com)
+[![React](https://skillicons.dev/icons?i=react)](https://react.dev)
+[![Vite](https://skillicons.dev/icons?i=vite)](https://vitejs.dev)
+[![Tailwind](https://skillicons.dev/icons?i=tailwind)](https://tailwindcss.com)
+
+| Layer | Technology |
+|-------|-----------|
+| **Backend** | Python 3.9+ · FastAPI · NumPy · Pandas · yfinance |
+| **Frontend** | React 18 · Vite · Tailwind CSS · Recharts |
+| **Data Source** | Yahoo Finance API |
+| **Paradigm** | OOP (single-responsibility classes) |
+
+</div>
 
 ---
 
-## Installation and launch
+## Getting Started
 
 ### Prerequisites
+
 - Python 3.9+
 - Node.js 18+
 
@@ -89,9 +154,8 @@ The backend follows **Object-Oriented Programming** principles with a single res
 cd backend
 pip install -r requirements.txt
 uvicorn main:app --reload
+# → http://localhost:8000
 ```
-
-The API runs on `http://localhost:8000`.
 
 ### Frontend
 
@@ -99,36 +163,40 @@ The API runs on `http://localhost:8000`.
 cd frontend
 npm install
 npm run dev
+# → http://localhost:5173
 ```
 
-The UI is available on `http://localhost:5173`.
-
 ---
 
-## Usage
+## ◈ Usage
 
-1. Select an analysis period (historical window).
-2. Choose the assets to include in the portfolio (basket of tickers).
-3. Click **Generate Alpha**.
+1. Select an analysis period *(historical window)*
+2. Choose the assets to include in the portfolio *(basket of tickers)*
+3. Click **Generate Alpha**
 
 The dashboard displays:
-- **KPIs**: volatilities (naive vs RMT), stability index, Sharpe ratios, 95% VaR
-- **Performance**: RMT portfolio vs S&P 500 on the test set
-- **Marchenko-Pastur**: theoretical noise distribution, empirical eigenvalues, λ_max threshold
-- **Correlation matrix** (filtered)
-- **Allocation**: optimal weights of the RMT portfolio
+
+- **KPIs** — volatilities (naive vs RMT), stability index, Sharpe ratios, 95% VaR
+- **Performance** — RMT portfolio vs S&P 500 on the test set
+- **Marchenko–Pastur** — theoretical noise distribution, empirical eigenvalues, λ_max threshold
+- **Correlation Matrix** — filtered
+- **Allocation** — optimal weights of the RMT portfolio
 
 ---
 
-## Key metrics
+## Key Metrics
+
+<div align="center">
 
 | Metric | Definition |
 |--------|-----------|
-| Annualized volatility | σ × √252 |
-| Stability Index | (vol_naive / vol_RMT - 1) × 100 |
-| Sharpe Ratio | (R_p - R_f) / σ_p, R_f = 3% |
-| 95% VaR | 5th percentile of daily returns |
-| Q factor | T / N (days-to-assets ratio) |
+| **Annualized Volatility** | σ × √252 |
+| **Stability Index** | (vol_naive / vol_RMT − 1) × 100 |
+| **Sharpe Ratio** | (R_p − R_f) / σ_p,  R_f = 3% |
+| **95% VaR** | 5th percentile of daily returns |
+| **Q Factor** | T / N (days-to-assets ratio) |
+
+</div>
 
 ---
 
@@ -140,24 +208,31 @@ The dashboard displays:
 
 ---
 
-## Limitations and possible extensions
+## Limitations & Possible Extensions
 
 This project focuses on the standard RMT pipeline with an unconstrained GMVP. Several natural extensions were intentionally left out of scope:
 
 - **No-short constraint** (w ≥ 0) via SLSQP optimization
 - **Walk-forward backtesting** with rolling windows
-- **Ledoit-Wolf shrinkage** as an alternative regularization method
-- **Expected returns integration** to move from GMVP to the tangency portfolio (max Sharpe)
-
----
-
-## Contributors
-
-- [@1drien](https://github.com/1drien)
-- [@elkiliayma-sys](https://github.com/elkiliayma-sys)
+- **Ledoit–Wolf shrinkage** as an alternative regularization method
+- **Expected returns integration** to move from GMVP to the tangency portfolio *(max Sharpe)*
 
 ---
 
 ## License
 
 Academic project — M2 FinTech, 2025
+
+---
+
+<div align="center">
+
+[![@1drien](https://img.shields.io/badge/Made%20with%20RMT%20%26%20%CE%BB-eigenvalues-0d1117?style=for-the-badge&logo=github&logoColor=00f5d4)](https://github.com/1drien)
+&nbsp;
+[![@elkiliayma-sys](https://img.shields.io/badge/@elkiliayma--sys-0d1117?style=for-the-badge&logo=github&logoColor=9d8df1)](https://github.com/elkiliayma-sys)
+
+<br/>
+
+![wave](https://raw.githubusercontent.com/Trilokia/Trilokia/379277808c61ef204768a61bbc5d25bc7798ccf/bottom_header.svg)
+
+</div>
