@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=venom&color=0:0a0e27,30:0d1b3d,60:1a2855,100:2d4a8c&height=280&section=header&text=RMT%20Portfolio%20Optimizer&fontSize=50&fontColor=00f5d4&animation=fadeIn&fontAlignY=40&desc=Random%20Matrix%20Theory%20%E2%97%A6%20Quantitative%20Finance%20Engine&descAlignY=62&descColor=9d8df1&stroke=00f5d4&strokeWidth=2" width="100%"/>
+<img src="https://capsule-render.vercel.app/api?type=egg-white&color=0:0a0e27,30:0d1b3d,60:1a2855,100:2d4a8c&height=280&section=header&text=RMT%20Portfolio%20Optimizer&fontSize=50&fontColor=00f5d4&animation=fadeIn&fontAlignY=40&desc=Random%20Matrix%20Theory%20%E2%97%A6%20Quantitative%20Finance%20Engine&descAlignY=62&descColor=9d8df1&stroke=00f5d4&strokeWidth=2" width="100%"/>
 
 <br/>
 
